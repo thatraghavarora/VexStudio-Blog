@@ -16,7 +16,7 @@ import {
   Plus,
   Radio,
   Save,
-  ShieldCheck,
+  Search,
   Trash2,
 } from 'lucide-react';
 import { isSupabaseConfigured, supabase } from './supabaseClient';
@@ -45,6 +45,14 @@ function slugify(value) {
     .trim()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function matchesSearch(post, searchTerm) {
+  const value = searchTerm.trim().toLowerCase();
+  if (!value) return true;
+  return [post.title, post.slug, post.excerpt, post.content, post.category]
+    .filter(Boolean)
+    .some((field) => field.toLowerCase().includes(value));
 }
 
 function useCursorGlow() {
@@ -147,11 +155,12 @@ function App() {
   useCursorGlow();
   const pathname = window.location.pathname;
   const isAdmin = pathname.startsWith('/admin');
+  const isBlogsArchive = pathname === '/blogs';
   const isBlogPost = pathname.startsWith('/blog/');
   return (
     <>
       <div className="cursor-glow" />
-      {isAdmin ? <AdminPanel /> : isBlogPost ? <BlogPostPage slug={pathname.split('/blog/')[1]} /> : <BlogHome />}
+      {isAdmin ? <AdminPanel /> : isBlogsArchive ? <BlogsArchive /> : isBlogPost ? <BlogPostPage slug={pathname.split('/blog/')[1]} /> : <BlogHome />}
     </>
   );
 }
@@ -159,6 +168,7 @@ function App() {
 function BlogHome() {
   const { posts, loading, loadPosts } = usePosts();
   const [activeCategory, setActiveCategory] = useState('ALL');
+  const [searchTerm, setSearchTerm] = useState('');
   useRevealAnimations();
 
   useEffect(() => {
@@ -169,9 +179,10 @@ function BlogHome() {
     () => ['ALL', ...Array.from(new Set(posts.map((post) => post.category).filter(Boolean)))],
     [posts],
   );
-  const visiblePosts = activeCategory === 'ALL'
+  const categoryPosts = activeCategory === 'ALL'
     ? posts
     : posts.filter((post) => post.category === activeCategory);
+  const visiblePosts = categoryPosts.filter((post) => matchesSearch(post, searchTerm));
   const featured = useMemo(
     () => visiblePosts.find((post) => post.featured) || visiblePosts[0],
     [visiblePosts],
@@ -230,6 +241,14 @@ function BlogHome() {
             <h2>Field Notes</h2>
           </div>
           <div className="archive-tools">
+            <label className="search-box">
+              <Search size={16} />
+              <input
+                placeholder="Search blogs"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+              />
+            </label>
             <select value={activeCategory} onChange={(event) => setActiveCategory(event.target.value)}>
               {categories.map((category) => <option key={category}>{category}</option>)}
             </select>
@@ -250,6 +269,76 @@ function BlogHome() {
       </section>
 
       <CommunitySection />
+    </main>
+  );
+}
+
+function BlogsArchive() {
+  const { posts, loading, loadPosts } = usePosts();
+  const [activeCategory, setActiveCategory] = useState('ALL');
+  const [searchTerm, setSearchTerm] = useState('');
+  useRevealAnimations();
+
+  useEffect(() => {
+    loadPosts(false);
+  }, []);
+
+  const categories = useMemo(
+    () => ['ALL', ...Array.from(new Set(posts.map((post) => post.category).filter(Boolean)))],
+    [posts],
+  );
+  const categoryPosts = activeCategory === 'ALL'
+    ? posts
+    : posts.filter((post) => post.category === activeCategory);
+  const visiblePosts = categoryPosts.filter((post) => matchesSearch(post, searchTerm));
+  const featuredPosts = visiblePosts.filter((post) => post.featured);
+
+  return (
+    <main>
+      <Nav />
+      <section className="archive-page">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="signal">DIRECT / BLOGS</p>
+            <h1>All Blogs</h1>
+          </div>
+          <div className="archive-tools">
+            <label className="search-box">
+              <Search size={16} />
+              <input
+                placeholder="Search blogs"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+              />
+            </label>
+            <select value={activeCategory} onChange={(event) => setActiveCategory(event.target.value)}>
+              {categories.map((category) => <option key={category}>{category}</option>)}
+            </select>
+          </div>
+        </div>
+
+        {featuredPosts.length > 0 && (
+          <div className="archive-block" data-reveal>
+            <p className="signal">FEATURED BLOGS</p>
+            <div className="post-grid">
+              {featuredPosts.map((post) => <PostCard key={post.id} post={post} />)}
+            </div>
+          </div>
+        )}
+
+        <div className="archive-block" data-reveal>
+          <p className="signal">{loading ? 'SYNCING' : `${visiblePosts.length} POSTS`}</p>
+          <div className="post-grid">
+            {visiblePosts.map((post) => <PostCard key={post.id} post={post} />)}
+          </div>
+          {!loading && visiblePosts.length === 0 && (
+            <div className="empty-feed">
+              <p className="signal">NO POSTS</p>
+              <h3>No matching published posts.</h3>
+            </div>
+          )}
+        </div>
+      </section>
     </main>
   );
 }
@@ -457,8 +546,13 @@ function AdminPanel() {
         <p className="signal">ADMIN / UPLOAD CONSOLE</p>
         <h1>Blog Control Room</h1>
         <p>Create horror game devlogs, community updates, GDD notes, and studio news.</p>
-        <div className="status-pill">
-          <Eye size={16} /> {isSupabaseConfigured ? 'Supabase linked' : 'Local demo mode'}
+        <div className="admin-actions">
+          <a className="status-pill" href="/blogs" target="_blank" rel="noreferrer">
+            <BookOpen size={16} /> All Blogs
+          </a>
+          <div className="status-pill">
+            <Eye size={16} /> {isSupabaseConfigured ? 'Supabase linked' : 'Local demo mode'}
+          </div>
         </div>
       </section>
 
@@ -475,7 +569,7 @@ function AdminPanel() {
         <section className="admin-grid">
           <form className="editor-panel" onSubmit={submitPost}>
             <div className="panel-title">
-              <h2>{form.id ? 'Edit Transmission' : 'New Transmission'}</h2>
+              <h2>{form.id ? 'Update Blog' : 'New Blog'}</h2>
               <Plus size={20} />
             </div>
             <input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value, slug: slugify(e.target.value) })} required />
@@ -501,7 +595,14 @@ function AdminPanel() {
             {form.cover_url && <img className="thumb-preview" src={form.cover_url} alt="Thumbnail preview" />}
             <label className="checkline"><input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> Featured post</label>
             <label className="checkline"><input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} /> Published</label>
-            <button className="btn primary clipped" type="submit"><Save size={18} /> Save Post</button>
+            <button className="btn primary clipped" type="submit">
+              <Save size={18} /> {form.id ? 'Update Post' : 'Save Post'}
+            </button>
+            {form.id && (
+              <button className="btn ghost" type="button" onClick={() => setForm(emptyPost)}>
+                <Plus size={18} /> New Post
+              </button>
+            )}
           </form>
 
           <div className="post-manager">
@@ -517,8 +618,8 @@ function AdminPanel() {
                   <p>{post.published ? 'Published' : 'Draft'} / {post.slug}</p>
                 </div>
                 <div className="manager-actions">
-                  <button className="icon-btn" type="button" onClick={() => setForm(post)}><Edit3 size={18} /></button>
-                  <button className="icon-btn danger" type="button" onClick={() => deletePost(post.id)}><Trash2 size={18} /></button>
+                  <button className="mini-btn" type="button" onClick={() => setForm(post)}><Edit3 size={16} /> Edit</button>
+                  <button className="mini-btn danger" type="button" onClick={() => deletePost(post.id)}><Trash2 size={16} /> Delete</button>
                 </div>
               </div>
             ))}

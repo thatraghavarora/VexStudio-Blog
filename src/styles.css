@@ -234,8 +234,14 @@ h1, h2, h3 {
 .posts-section,
 .community,
 .admin-hero,
-.admin-grid {
+.admin-grid,
+.archive-page {
   padding: clamp(4rem, 8vw, 7rem) clamp(1rem, 5vw, 5rem);
+}
+
+.archive-page {
+  min-height: 100vh;
+  padding-top: 9rem;
 }
 
 .feature-card {
@@ -311,6 +317,37 @@ h1, h2, h3 {
 .archive-tools select {
   width: 170px;
   margin: 0;
+}
+
+.search-box {
+  min-height: 44px;
+  min-width: min(320px, 100%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--muted);
+}
+
+.search-box input {
+  min-height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.search-box input:focus {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.archive-block {
+  margin-top: 2rem;
 }
 
 .meta-row span {
@@ -471,6 +508,12 @@ h1, h2, h3 {
   font-weight: 700;
 }
 
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .admin-grid {
   display: grid;
   grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
@@ -591,6 +634,31 @@ select:focus {
 .manager-item p {
   margin: 0;
   color: var(--muted);
+}
+
+.manager-actions {
+  justify-content: flex-end;
+}
+
+.mini-btn {
+  min-height: 38px;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 0.72rem;
+}
+
+.mini-btn:hover {
+  border-color: rgba(255, 69, 0, 0.68);
+  box-shadow: 0 0 24px rgba(255, 69, 0, 0.14);
 }
 
 .icon-btn {
