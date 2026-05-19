@@ -173,7 +173,6 @@ function BlogHome() {
   const { posts, loading, loadPosts } = usePosts();
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showAllPosts, setShowAllPosts] = useState(false);
   useRevealAnimations();
 
   useEffect(() => {
@@ -192,7 +191,7 @@ function BlogHome() {
     () => visiblePosts.find((post) => post.featured) || visiblePosts[0],
     [visiblePosts],
   );
-  const regularPosts = visiblePosts.filter((post) => showAllPosts || post.id !== featured?.id);
+  const regularPosts = visiblePosts;
 
   return (
     <main>
@@ -255,9 +254,6 @@ function BlogHome() {
             <select value={activeCategory} onChange={(event) => setActiveCategory(event.target.value)}>
               {categories.map((category) => <option key={category}>{category}</option>)}
             </select>
-            <button className="btn ghost" type="button" onClick={() => setShowAllPosts((value) => !value)}>
-              {showAllPosts ? 'Hide Featured' : 'Show All Posts'}
-            </button>
             <span>{loading ? 'Syncing database...' : `${visiblePosts.length} transmissions online`}</span>
           </div>
         </div>
