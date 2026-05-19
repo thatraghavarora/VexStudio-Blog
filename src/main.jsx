@@ -241,6 +241,12 @@ function BlogHome() {
             <PostCard key={post.id} post={post} />
           ))}
         </div>
+        {!loading && visiblePosts.length === 0 && (
+          <div className="empty-feed" data-reveal>
+            <p className="signal">NO POSTS</p>
+            <h3>No published posts yet.</h3>
+          </div>
+        )}
       </section>
 
       <CommunitySection />

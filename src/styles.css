@@ -352,6 +352,18 @@ h1, h2, h3 {
 
 .post-body p { color: var(--muted); }
 
+.empty-feed {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 2rem;
+  background: linear-gradient(180deg, var(--panel-2), #080808);
+}
+
+.empty-feed h3 {
+  margin-top: 0.6rem;
+  font-size: 1rem;
+}
+
 .post-detail {
   min-height: 100vh;
   padding: 8rem clamp(1rem, 5vw, 5rem) 5rem;
