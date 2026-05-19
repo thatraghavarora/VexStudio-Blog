@@ -412,7 +412,7 @@ function Nav() {
         <Gamepad2 size={22} /> VEX<span>STUDIO</span>
       </a>
       <div>
-        <a href="https://vexstudio.xyz/">Home</a>
+        <a href="https://blogs.vexstudio.xyz/">Home</a>
         <a href="https://store.vexstudio.xyz/">Store</a>
         <a href="https://vexstudio.xyz/#contact-us">Contact Us</a>
       </div>
