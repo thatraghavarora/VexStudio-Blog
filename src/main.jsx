@@ -196,11 +196,11 @@ function BlogHome() {
         <img className="hero-media" src="/assets/vex-hero.png" alt="Dark game studio environment" />
         <div className="hero-shade" />
         <div className="hero-grid">
-          <p className="signal" data-reveal>UPLOAD / DEVLOG / HORROR BUILD</p>
+          <p className="signal" data-reveal>BLOG / BLOGS / GAME UPDATES</p>
           <h1 data-reveal>VEX STUDIO BLOG</h1>
           <p className="hero-copy" data-reveal>
-            Premium indie horror game-dev dispatches: Unreal experiments, GDD systems,
-            community drops, and behind-the-scenes production notes.
+            Latest game updates, best game stories, studio news, and behind-the-scenes
+            posts from VEX Studio.
           </p>
           <div className="hero-actions" data-reveal>
             <a className="btn primary clipped" href="#posts">
@@ -210,8 +210,6 @@ function BlogHome() {
         </div>
         <div className="watermark">VEX</div>
       </section>
-
-      <TechStrip />
 
       {featured && (
         <section className="feature-band" id="posts">
@@ -415,18 +413,6 @@ function Nav() {
         <a href="https://vexstudio.xyz/#contact-us">Contact Us</a>
       </div>
     </nav>
-  );
-}
-
-function TechStrip() {
-  return (
-    <div className="tech-strip" aria-label="technology marquee">
-      <div>
-        <span>UNREAL ENGINE</span><span>GDD DOCS</span><span>HORROR SYSTEMS</span>
-        <span>DISCORD OPS</span><span>SUPABASE DB</span><span>PLAYTEST LOOP</span>
-        <span>UNREAL ENGINE</span><span>GDD DOCS</span><span>HORROR SYSTEMS</span>
-      </div>
-    </div>
   );
 }
 

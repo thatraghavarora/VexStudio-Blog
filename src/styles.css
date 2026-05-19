@@ -206,30 +206,6 @@ h1, h2, h3 {
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
 }
 
-.tech-strip {
-  overflow: hidden;
-  border-block: 1px solid var(--line);
-  background: #0d0d0f;
-}
-
-.tech-strip div {
-  display: flex;
-  gap: 3rem;
-  width: max-content;
-  padding: 1rem 0;
-  animation: marquee 24s linear infinite;
-}
-
-.tech-strip span {
-  color: var(--muted);
-  font-family: 'Syncopate', sans-serif;
-  font-size: 0.72rem;
-}
-
-@keyframes marquee {
-  to { transform: translateX(-50%); }
-}
-
 .feature-band,
 .posts-section,
 .community,
