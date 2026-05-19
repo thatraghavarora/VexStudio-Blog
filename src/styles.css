@@ -496,6 +496,16 @@ h1, h2, h3 {
   font-weight: 700;
 }
 
+.status-pill.as-button {
+  cursor: pointer;
+  background: transparent;
+}
+
+.status-pill.as-button:hover {
+  border-color: rgba(255, 69, 0, 0.68);
+  box-shadow: 0 0 24px rgba(255, 69, 0, 0.14);
+}
+
 .admin-actions {
   display: flex;
   flex-wrap: wrap;

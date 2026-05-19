@@ -21,8 +21,8 @@ function urlNode(loc, lastmod, priority = '0.7') {
 }
 
 export default async function handler(_request, response) {
-  const supabaseUrl = process.env.VITE_SUPABASE_URL;
-  const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
   const urls = [
     urlNode(`${siteUrl}/`, null, '1.0'),
     urlNode(`${siteUrl}/blogs`, null, '0.8'),

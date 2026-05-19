@@ -6,6 +6,7 @@ import {
   ArrowRight,
   BookOpen,
   CalendarDays,
+  Download,
   Edit3,
   Eye,
   Gamepad2,
@@ -57,6 +58,30 @@ function matchesSearch(post, searchTerm) {
 
 function getPostPreview(post) {
   return post.excerpt || post.content?.split('\n').find(Boolean) || '';
+}
+
+function createSitemapXml(posts) {
+  const siteUrl = 'https://blogs.vexstudio.xyz';
+  const publishedPosts = posts.filter((post) => post.published && post.slug);
+  const nodes = [
+    { loc: `${siteUrl}/`, priority: '1.0' },
+    { loc: `${siteUrl}/blogs`, priority: '0.8' },
+    ...publishedPosts.map((post) => ({
+      loc: `${siteUrl}/blog/${post.slug}`,
+      lastmod: new Date(post.updated_at || post.created_at || Date.now()).toISOString(),
+      priority: '0.9',
+    })),
+  ];
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${nodes.map((node) => `  <url>
+    <loc>${node.loc}</loc>${node.lastmod ? `
+    <lastmod>${node.lastmod}</lastmod>` : ''}
+    <changefreq>weekly</changefreq>
+    <priority>${node.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
 }
 
 function useCursorGlow() {
@@ -517,6 +542,18 @@ function AdminPanel() {
     reader.readAsDataURL(file);
   };
 
+  const downloadSitemap = () => {
+    const xml = createSitemapXml(posts);
+    const blob = new Blob([xml], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'sitemap.xml';
+    link.click();
+    URL.revokeObjectURL(url);
+    setStatus('Sitemap generated from current published posts.');
+  };
+
   const submitPost = async (event) => {
     event.preventDefault();
     setStatus('Uploading transmission...');
@@ -540,6 +577,9 @@ function AdminPanel() {
           <a className="status-pill" href="/blogs" target="_blank" rel="noreferrer">
             <BookOpen size={16} /> All Blogs
           </a>
+          <button className="status-pill as-button" type="button" onClick={downloadSitemap}>
+            <Download size={16} /> Download Sitemap
+          </button>
           <div className="status-pill">
             <Eye size={16} /> {isSupabaseConfigured ? 'Supabase linked' : 'Local demo mode'}
           </div>
