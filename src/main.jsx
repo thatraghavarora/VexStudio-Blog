@@ -55,6 +55,10 @@ function matchesSearch(post, searchTerm) {
     .some((field) => field.toLowerCase().includes(value));
 }
 
+function getPostPreview(post) {
+  return post.excerpt || post.content?.split('\n').find(Boolean) || '';
+}
+
 function useCursorGlow() {
   useEffect(() => {
     const cursor = document.querySelector('.cursor-glow');
@@ -169,6 +173,7 @@ function BlogHome() {
   const { posts, loading, loadPosts } = usePosts();
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showAllPosts, setShowAllPosts] = useState(false);
   useRevealAnimations();
 
   useEffect(() => {
@@ -187,7 +192,7 @@ function BlogHome() {
     () => visiblePosts.find((post) => post.featured) || visiblePosts[0],
     [visiblePosts],
   );
-  const regularPosts = visiblePosts.filter((post) => post.id !== featured?.id);
+  const regularPosts = visiblePosts.filter((post) => showAllPosts || post.id !== featured?.id);
 
   return (
     <main>
@@ -217,7 +222,7 @@ function BlogHome() {
             <div>
               <p className="signal">FEATURED POST</p>
               <h2>{featured.title}</h2>
-              <p>{featured.excerpt}</p>
+              <p>{getPostPreview(featured)}</p>
               <div className="meta-row">
                 <span><CalendarDays size={16} /> {new Date(featured.created_at).toLocaleDateString()}</span>
                 <span><BookOpen size={16} /> {featured.read_time} min read</span>
@@ -226,7 +231,7 @@ function BlogHome() {
             <div className="feature-terminal">
               <span>BUILD STATUS</span>
               <strong>ACTIVE</strong>
-              <p>{featured.content}</p>
+              <p>{getPostPreview(featured)}</p>
             </div>
           </a>
         </section>
@@ -250,6 +255,9 @@ function BlogHome() {
             <select value={activeCategory} onChange={(event) => setActiveCategory(event.target.value)}>
               {categories.map((category) => <option key={category}>{category}</option>)}
             </select>
+            <button className="btn ghost" type="button" onClick={() => setShowAllPosts((value) => !value)}>
+              {showAllPosts ? 'Hide Featured' : 'Show All Posts'}
+            </button>
             <span>{loading ? 'Syncing database...' : `${visiblePosts.length} transmissions online`}</span>
           </div>
         </div>

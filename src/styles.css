@@ -249,6 +249,7 @@ h1, h2, h3 {
   border-radius: 8px;
   padding: 1.4rem;
   background: rgba(255, 69, 0, 0.06);
+  align-self: stretch;
 }
 
 .feature-card,
@@ -266,6 +267,13 @@ h1, h2, h3 {
 .feature-terminal strong {
   margin: 0.5rem 0 1rem;
   color: var(--accent);
+}
+
+.feature-terminal p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
 }
 
 .section-head {
@@ -292,6 +300,10 @@ h1, h2, h3 {
 
 .archive-tools select {
   width: 170px;
+  margin: 0;
+}
+
+.archive-tools .btn {
   margin: 0;
 }
 
