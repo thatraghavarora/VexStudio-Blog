@@ -6,7 +6,7 @@ export const seedPosts = [
     excerpt: 'How empty spaces, audio restraint, and Unreal blockouts create dread before the monster arrives.',
     content:
       'A horror scene does not start when the enemy appears. It starts when the player knows the room is listening. In our latest prototype pass we removed two jump scares, widened the corridor timing, and let the audio system breathe. The result felt colder, more premium, and more hostile.',
-    category: 'INTEL',
+    category: 'DEVLOG',
     cover_url: '/assets/vex-hero.png',
     read_time: 5,
     featured: true,

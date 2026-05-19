@@ -30,14 +30,14 @@ const emptyPost = {
   slug: '',
   excerpt: '',
   content: '',
-  category: 'INTEL',
+  category: 'DEVLOG',
   cover_url: '/assets/vex-hero.png',
   read_time: 4,
   featured: false,
   published: true,
 };
 
-const defaultCategories = ['INTEL', 'PROTOCOLS', 'COMMLINK', 'UPLOAD'];
+const defaultCategories = ['DEVLOG', 'PROTOCOLS', 'COMMLINK', 'UPLOAD'];
 
 function slugify(value) {
   return value
@@ -186,17 +186,14 @@ function BlogHome() {
         <div className="hero-shade" />
         <div className="hero-grid">
           <p className="signal" data-reveal>UPLOAD / DEVLOG / HORROR BUILD</p>
-          <h1 data-reveal>VEX STUDIO INTEL</h1>
+          <h1 data-reveal>VEX STUDIO BLOG</h1>
           <p className="hero-copy" data-reveal>
             Premium indie horror game-dev dispatches: Unreal experiments, GDD systems,
             community drops, and behind-the-scenes production notes.
           </p>
           <div className="hero-actions" data-reveal>
             <a className="btn primary clipped" href="#posts">
-              Read Intel <ArrowRight size={18} />
-            </a>
-            <a className="btn ghost" href="/admin">
-              Admin Panel <ShieldCheck size={18} />
+              Read Blogs <ArrowRight size={18} />
             </a>
           </div>
         </div>
@@ -209,7 +206,7 @@ function BlogHome() {
         <section className="feature-band" id="posts">
           <a className="feature-card" href={`/blog/${featured.slug}`} data-reveal="card">
             <div>
-              <p className="signal">FEATURED INTEL</p>
+              <p className="signal">FEATURED POST</p>
               <h2>{featured.title}</h2>
               <p>{featured.excerpt}</p>
               <div className="meta-row">
@@ -280,7 +277,7 @@ function BlogPostPage({ slug }) {
         <section className="post-detail empty-state">
           <p className="signal">404 / SIGNAL LOST</p>
           <h1>Transmission Not Found</h1>
-          <a className="btn primary clipped" href="/">Back To Intel</a>
+          <a className="btn primary clipped" href="/">Back To Blog</a>
         </section>
       </main>
     );
